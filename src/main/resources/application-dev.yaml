@@ -1,0 +1,26 @@
+# At which port is application running on
+server:
+    port: 8082
+
+# Logging settings
+logging:
+    level:
+        com.example.demo: debug
+    file:
+        name: logs/app.log
+
+# Database settings
+spring:
+    datasource:
+        driver-class-name: org.postgresql.Driver
+        url: ${DATASOURCE_URL:jdbc:postgresql://localhost:15432/insta}
+        username: ${DATASOURCE_USER:admin}
+        password: ${DATASOURCE_PSWD:123}
+    jpa:
+        show-sql: false
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.PostgreSQLDialect
+#    liquibase:
+#        enabled: true
+#        change-log: classpath:db/changelog/db.changelog-master.yaml
