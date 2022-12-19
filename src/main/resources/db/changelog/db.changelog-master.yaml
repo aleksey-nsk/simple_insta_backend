@@ -1,0 +1,13 @@
+databaseChangeLog:
+    -   include:
+            file: db/changelog/01_table_users.xml
+    -   include:
+            file: db/changelog/02_table_posts.xml
+    -   include:
+            file: db/changelog/03_table_comments.xml
+    -   include:
+            file: db/changelog/04_table_user_roles.xml
+    -   include:
+            file: db/changelog/05_table_likes.xml
+    -   include:
+            file: db/changelog/06_table_images.xml
