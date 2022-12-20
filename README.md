@@ -12,3 +12,7 @@
 1. Написал файл docker/docker-compose.yaml. Создал базу. Прписал настройки в файле application
 
 
+---
+
+Раздел 4: Защита с помощью Spring Security + JWT
+

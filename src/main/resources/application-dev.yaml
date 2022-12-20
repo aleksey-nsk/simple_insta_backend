@@ -5,7 +5,7 @@ server:
 # Logging settings
 logging:
     level:
-        com.example.demo: debug
+        com.example.simple_insta_backend: debug
     file:
         name: logs/app.log
 
@@ -21,6 +21,6 @@ spring:
         properties:
             hibernate:
                 dialect: org.hibernate.dialect.PostgreSQLDialect
-#    liquibase:
-#        enabled: true
-#        change-log: classpath:db/changelog/db.changelog-master.yaml
+    liquibase:
+        enabled: true
+        change-log: classpath:db/changelog/db.changelog-master.yaml
