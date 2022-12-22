@@ -1,6 +1,6 @@
 package com.example.simple_insta_backend.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.example.simple_insta_backend.entity.enums.ERole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -62,28 +62,33 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Post> posts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    private Set<Role> roles = new HashSet<>(); // в Set только уникальные элементы
+    //    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    private Set<Role> roles = new HashSet<>(); // в Set только уникальные элементы
+    @ElementCollection(targetClass = ERole.class)
+    @CollectionTable(name = "roles", joinColumns = @JoinColumn(name = "user_id"))
+    private Set<ERole> roles = new HashSet<>(); // в Set только уникальные элементы
 
-    // Что это?
-//    @Transient
-//    private Collection<? extends GrantedAuthority> authorities;
+    // ЧТО ЭТО?
+    //
+    @Transient
+    private Collection<? extends GrantedAuthority> authorities;
 
-//    public User(Long id, String username, String email, String password, Collection<? extends GrantedAuthority> authorities) {
+    // ДОБАВИЛИ НОВЫЙ КОНСТРУКТОР
+//    public User(Long id, String username, String password, String email, Collection<? extends GrantedAuthority> authorities) {
 //        this.id = id;
 //        this.username = username;
-//        this.email = email;
 //        this.password = password;
+//        this.email = email;
 //        this.authorities = authorities;
 //    }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+    public String getPassword() {
+        return password;
     }
 
     @Override
-    public String getUsername() {
+    public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
     }
 
@@ -105,10 +110,5 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
     }
 }

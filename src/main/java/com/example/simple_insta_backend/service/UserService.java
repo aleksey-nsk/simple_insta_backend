@@ -1,7 +1,7 @@
 package com.example.simple_insta_backend.service;
 
 import com.example.simple_insta_backend.entity.User;
-import com.example.simple_insta_backend.security.SignupRequest;
+import com.example.simple_insta_backend.payload.request.SignupRequest;
 
 /**
  * @author Aleksey Zhdanov
@@ -10,10 +10,10 @@ import com.example.simple_insta_backend.security.SignupRequest;
 public interface UserService {
 
     /**
-     * <p>Создаёт нового клиента</p>
+     * <p>Создаёт нового пользователя</p>
      *
-     * @param userIn Данные клиента для добавления
-     * @return Сохранённый в БД клиент
+     * @param userIn Данные пользователя для добавления
+     * @return Сохранённый в БД пользователь
      */
     User createUser(SignupRequest userIn);
 }

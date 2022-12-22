@@ -9,7 +9,8 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="roles_pk"/>
             </column>
-            <column name="role_name" type="varchar(50)"/>
+            <!--            <column name="role_name" type="varchar(50)"/>-->
+            <column name="roles" type="int"/>
             <column name="user_id" type="bigint"/>
 
         </createTable>
