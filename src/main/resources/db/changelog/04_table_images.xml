@@ -9,7 +9,7 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="images_pk"/>
             </column>
-            <column name="name" type="varchar(50)"/>
+            <column name="title" type="varchar(50)"/>
             <column name="image_bytes" type="bytea"/>
             <column name="user_id" type="bigint"/>
             <column name="post_id" type="bigint"/>

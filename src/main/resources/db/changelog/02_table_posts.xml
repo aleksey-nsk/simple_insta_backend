@@ -9,7 +9,7 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="posts_pk"/>
             </column>
-            <column name="title" type="varchar(50)"/>
+            <column name="topic" type="varchar(50)"/>
             <column name="caption" type="varchar(50)"/>
             <column name="location" type="varchar(50)"/>
             <column name="created_date" type="timestamp"/>

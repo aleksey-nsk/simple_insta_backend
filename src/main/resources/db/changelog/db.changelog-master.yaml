@@ -6,8 +6,8 @@ databaseChangeLog:
     -   include:
             file: db/changelog/03_table_comments.xml
     -   include:
-            file: db/changelog/04_table_user_roles.xml
+            file: db/changelog/04_table_images.xml
     -   include:
-            file: db/changelog/05_table_likes.xml
+            file: db/changelog/05_table_roles.xml
     -   include:
-            file: db/changelog/06_table_images.xml
+            file: db/changelog/06_table_likes.xml

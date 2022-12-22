@@ -4,20 +4,21 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
 
-    <changeSet id="Create table user_roles" author="Aleksey Zhdanov">
-        <createTable tableName="user_roles">
+    <changeSet id="Create table roles" author="Aleksey Zhdanov">
+        <createTable tableName="roles">
             <column name="id" type="bigint" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="user_roles_pk"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="roles_pk"/>
             </column>
-            <column name="role" type="varchar(50)"/>
+            <column name="role_name" type="varchar(50)"/>
             <column name="user_id" type="bigint"/>
+
         </createTable>
 
-        <addForeignKeyConstraint baseTableName="user_roles"
+        <addForeignKeyConstraint baseTableName="roles"
                                  baseColumnNames="user_id"
                                  referencedTableName="users"
                                  referencedColumnNames="id"
-                                 constraintName="user_roles_users_fk"/>
+                                 constraintName="roles_users_fk"/>
     </changeSet>
 
 </databaseChangeLog>

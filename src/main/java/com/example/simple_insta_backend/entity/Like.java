@@ -19,9 +19,9 @@ public class Like {
     private Long id;
 
     @Column(name = "user_id", nullable = false)
-    private Long userId;
+    private String user_id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "post_id")
     private Post post;
 }

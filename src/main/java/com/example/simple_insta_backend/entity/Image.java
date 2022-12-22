@@ -6,6 +6,10 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+// Нет прямой зависимости.
+// Будем сохранять изображение либо юзеру (тогда задаём userId, а postId=null)
+// Либо сохраняем посту (тогда задаём postId, а userId=null)
+
 @Entity
 @Table(name = "images")
 @Data
@@ -18,8 +22,8 @@ public class Image {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Column(name = "title", nullable = false)
+    private String title;
 
     @Column(name = "image_bytes")
     private byte[] imageBytes;

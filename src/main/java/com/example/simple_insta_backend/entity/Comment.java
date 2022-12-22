@@ -25,8 +25,14 @@ public class Comment {
     @Column(name = "created_date", nullable = false, updatable = false)
     private LocalDateTime createdDate;
 
+//    @PrePersist
+//    protected void onCreate() {
+//        this.createdDate = LocalDateTime.now();
+//    }
+
+    // Юзер сделавший комент
     @Column(name = "user_id", nullable = false)
-    private Long userId;
+    private String user_id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "post_id")
