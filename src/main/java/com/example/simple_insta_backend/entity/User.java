@@ -66,16 +66,16 @@ public class User implements UserDetails {
     private Set<Role> roles = new HashSet<>(); // в Set только уникальные элементы
 
     // Что это?
-    @Transient
-    private Collection<? extends GrantedAuthority> authorities;
+//    @Transient
+//    private Collection<? extends GrantedAuthority> authorities;
 
-    public User(Long id, String username, String email, String password, Collection<? extends GrantedAuthority> authorities) {
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.authorities = authorities;
-    }
+//    public User(Long id, String username, String email, String password, Collection<? extends GrantedAuthority> authorities) {
+//        this.id = id;
+//        this.username = username;
+//        this.email = email;
+//        this.password = password;
+//        this.authorities = authorities;
+//    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
