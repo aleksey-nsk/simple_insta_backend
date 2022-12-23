@@ -68,8 +68,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         log.debug("НАСТРОЙКА АВТОРИЗАЦИИ");
         log.debug("");
 
-        http.cors()
-                .and().csrf().disable() // отключаем csrf
+        http
+                // .cors().and()
+                .csrf().disable() // отключаем csrf
 
                 // Кто будет разбираться с ошибкой если появится
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
@@ -80,6 +81,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(SecurityConstants.AUTH_URLS).permitAll() // сюда есть доступ у всех
+                .antMatchers("/api/v1/hello").permitAll()
+
+//                .antMatchers("/api/v1/admin").hasAuthority("ROLE_ADMIN")
+//                .antMatchers("/api/v1/user").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+//                .antMatchers("/api/v1/admin").hasRole("ADMIN")
+//                .antMatchers("/api/v1/user").hasAnyRole("USER", "ADMIN")
+
                 .anyRequest().authenticated(); // все остальные урлы должны быть авторизированы
 
 //        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
