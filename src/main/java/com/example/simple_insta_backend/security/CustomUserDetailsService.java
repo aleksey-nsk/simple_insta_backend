@@ -62,6 +62,17 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findUserById(id).orElse(null);
 //        log.debug("  user: " + user);
 
+        if (user != null) {
+            log.debug("  roles: " + user.getRoles());
+
+            List<GrantedAuthority> authorities = user.getRoles().stream()
+                    .map(role -> new SimpleGrantedAuthority(role.name()))
+                    .collect(Collectors.toList());
+            user.setAuthorities(authorities);
+
+            log.debug("  authorities: " + user.getAuthorities());
+        }
+
         return user;
     }
 

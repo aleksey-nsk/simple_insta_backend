@@ -32,7 +32,7 @@ public class Comment {
 
     // Юзер сделавший комент
     @Column(name = "user_id", nullable = false)
-    private String user_id;
+    private Long userId;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "post_id")

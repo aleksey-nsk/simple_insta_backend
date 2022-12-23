@@ -6,8 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.util.UUID;
-
 @ControllerAdvice
 @Log4j2
 public class GlobalExceptionHandler {
@@ -18,6 +16,14 @@ public class GlobalExceptionHandler {
         log.error(message);
         Response response = new Response(message);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({PostNotFoundException.class, ImageNotFoundException.class})
+    public ResponseEntity<Object> handleEntityNotFound(RuntimeException e) {
+        String message = "Entity not found: " + e.getMessage();
+        log.error(message);
+        Response response = new Response(message);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
 //    @ExceptionHandler({ClientNotFoundException.class, AccountNotFoundException.class, CardNotFoundException.class})
