@@ -8,6 +8,7 @@ import com.example.simple_insta_backend.repository.ImageRepository;
 import com.example.simple_insta_backend.repository.PostRepository;
 import com.example.simple_insta_backend.repository.UserRepository;
 import com.example.simple_insta_backend.service.ImageService;
+import com.example.simple_insta_backend.service.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -39,6 +40,9 @@ public class ImageServiceImpl implements ImageService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserService userService;
+
     // Это походу не используем
 //    @Autowired
 //    private PostRepository postRepository;
@@ -51,7 +55,7 @@ public class ImageServiceImpl implements ImageService {
         log.debug("  file" + file);
         log.debug("  principal" + principal);
 
-        User user = getUserByPrincipal(principal);
+        User user = userService.getUserByPrincipal(principal);
         log.debug("  user" + user);
 
         log.info("  Uploading image profile to User: {}", user.getUsername());
@@ -82,10 +86,10 @@ public class ImageServiceImpl implements ImageService {
         log.debug("");
         log.debug("Method uploadImageToPost()");
         log.debug("  file" + file);
-        log.debug("  principal" + principal);
+//        log.debug("  principal" + principal);
         log.debug("  postId" + postId);
 
-        User user = getUserByPrincipal(principal);
+        User user = userService.getUserByPrincipal(principal);
         log.debug("  user" + user);
 
         Post post = user.getPosts()
@@ -100,7 +104,7 @@ public class ImageServiceImpl implements ImageService {
         image.setPostId(post.getId());
         log.debug("  image" + image);
 
-        log.info("Uploading image to Post: {}", post.getId());
+        log.info("  Uploading image to Post: {}", post.getId());
         Image savedImg = imageRepository.save(image);
         log.debug("  savedImg" + savedImg);
         return savedImg;
@@ -113,7 +117,7 @@ public class ImageServiceImpl implements ImageService {
         log.debug("Method getImageToUser()");
         log.debug("  principal" + principal);
 
-        User user = getUserByPrincipal(principal);
+        User user = userService.getUserByPrincipal(principal);
         log.debug("  user" + user);
 
         Image image = imageRepository.findByUserId(user.getId()).orElse(null);
@@ -219,15 +223,15 @@ public class ImageServiceImpl implements ImageService {
     }
 
     // Вспомогательный метод: достать юзера из объекта Principal
-    private User getUserByPrincipal(Principal principal) {
-        log.debug("");
-        log.debug("Method getUserByPrincipal()");
-        log.debug("  principal: " + principal);
-
-        String username = principal.getName();
-        log.debug("  username: " + username);
-
-        return userRepository.findUserByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
-    }
+//    private User getUserByPrincipal(Principal principal) {
+//        log.debug("");
+//        log.debug("Method getUserByPrincipal()");
+//        log.debug("  principal: " + principal);
+//
+//        String username = principal.getName();
+//        log.debug("  username: " + username);
+//
+//        return userRepository.findUserByUsername(username)
+//                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+//    }
 }

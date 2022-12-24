@@ -35,4 +35,14 @@ public class Image {
     //    @JsonIgnore
     @Column(name = "post_id")
     private Long postId;
+
+    @Override
+    public String toString() {
+        return "Image{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", userId=" + userId +
+                ", postId=" + postId +
+                '}';
+    }
 }

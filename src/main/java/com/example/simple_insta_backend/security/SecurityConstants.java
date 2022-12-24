@@ -11,5 +11,6 @@ public class SecurityConstants {
     public static final String CONTENT_TYPE = "application/json";
 
     // Сделаем так чтобы jwt токен мог иссякнуть
-    public static final long EXPIRATION_TIME = 600_000; // 600_000 мс == 10 минут
+//    public static final long EXPIRATION_TIME = 600_000; // 600_000 мс == 10 минут
+    public static final long EXPIRATION_TIME = 6_000_000; // 6_000_000 мс == 100 минут
 }

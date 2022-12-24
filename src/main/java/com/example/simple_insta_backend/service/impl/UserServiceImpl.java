@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
         log.debug("");
         log.debug("Method updateUser()");
         log.debug("  userDto: " + userDto);
-        log.debug("  principal: " + principal);
+//        log.debug("  principal: " + principal);
 
         // Объект Principal будет содержать в себе данные юзера
         // такие как userName, id
@@ -108,16 +108,28 @@ public class UserServiceImpl implements UserService {
     }
 
     // Вспомогательный метод: достать юзера из объекта Principal
-    private User getUserByPrincipal(Principal principal) {
+    @Override
+    public User getUserByPrincipal(Principal principal) {
         log.debug("");
         log.debug("Method getUserByPrincipal()");
-        log.debug("  principal: " + principal);
+//        log.debug("  principal: " + principal);
 
         String username = principal.getName();
         log.debug("  username: " + username);
 
         return userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+    }
+
+    @Override
+    public User getUserById(Long id) {
+        log.debug("");
+        log.debug("Method getUserById()");
+        log.debug("  id: " + id);
+
+        User user = userRepository.findUserById(id).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        log.debug("  user: " + user);
+        return user;
     }
 
     // Вспомогательный метод. Взять текущего пользователя
