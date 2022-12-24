@@ -21,4 +21,8 @@ public interface UserService {
     User createUser(SignupRequest userIn);
 
     User updateUser(UserDto userDto, Principal principal);
+
+    User getUserByPrincipal(Principal principal);
+
+    User getUserById(Long id);
 }

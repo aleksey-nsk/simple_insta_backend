@@ -59,5 +59,18 @@ public class Post {
     private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
-    private List<Like> likes;
+    private List<Like> likes = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id=" + id +
+                ", topic='" + topic + '\'' +
+                ", caption='" + caption + '\'' +
+                ", location='" + location + '\'' +
+                ", createdDate=" + createdDate +
+                ", comments=" + comments +
+                ", likes=" + likes +
+                '}';
+    }
 }

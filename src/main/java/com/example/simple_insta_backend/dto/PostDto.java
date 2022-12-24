@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 // PostDto будем передавать или принимать с фронта
 
 @Data
@@ -16,7 +18,8 @@ public class PostDto {
     private String caption;
     private String location;
     private String username;
-//    private Integer likes;
-//    private Set<String> usersLiked;
+
+    private Integer likes;
+    private Set<String> usersLiked;
 
 }

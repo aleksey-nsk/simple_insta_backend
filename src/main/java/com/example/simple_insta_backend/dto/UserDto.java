@@ -16,7 +16,7 @@ public class UserDto {
 
     private Long id;
 
-    @NotEmpty
+//    @NotEmpty
     private String username;
 
     @NotEmpty

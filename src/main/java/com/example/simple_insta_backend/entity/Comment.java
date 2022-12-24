@@ -31,10 +31,22 @@ public class Comment {
 //    }
 
     // Юзер сделавший комент
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+//    @Column(name = "user_id", nullable = false)
+//    private Long userId;
+    @Column(name = "username", nullable = false)
+    private String username;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "post_id")
     private Post post;
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", message='" + message + '\'' +
+                ", createdDate=" + createdDate +
+                ", username='" + username + '\'' +
+                '}';
+    }
 }

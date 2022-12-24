@@ -16,5 +16,6 @@ public class CommentDto {
     @NotEmpty
     private String message;
 
-    private Long userId;
+//    private Long userId;
+    private String username;
 }

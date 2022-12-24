@@ -9,6 +9,7 @@ import com.example.simple_insta_backend.repository.CommentRepository;
 import com.example.simple_insta_backend.repository.PostRepository;
 import com.example.simple_insta_backend.repository.UserRepository;
 import com.example.simple_insta_backend.service.CommentService;
+import com.example.simple_insta_backend.service.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -31,6 +32,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
 
     // Вернуть все комментарии для поста
     @Override
@@ -56,9 +60,9 @@ public class CommentServiceImpl implements CommentService {
         log.debug("Method saveComment()");
         log.debug("  postId: " + postId);
         log.debug("  commentDto: " + commentDto);
-        log.debug("  principal: " + principal);
+//        log.debug("  principal: " + principal);
 
-        User user = getUserByPrincipal(principal);
+        User user = userService.getUserByPrincipal(principal);
         log.debug("  user: " + user);
 
         Post post = postRepository.findById(postId)
@@ -68,7 +72,7 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = new Comment();
         comment.setMessage(commentDto.getMessage());
         comment.setCreatedDate(LocalDateTime.now());
-        comment.setUserId(user.getId());
+        comment.setUsername(user.getUsername());
         comment.setPost(post);
         log.debug("  comment: " + comment);
 
@@ -93,15 +97,15 @@ public class CommentServiceImpl implements CommentService {
     }
 
     // Вспомогательный метод: достать юзера из объекта Principal
-    private User getUserByPrincipal(Principal principal) {
-        log.debug("");
-        log.debug("Method getUserByPrincipal()");
-        log.debug("  principal: " + principal);
-
-        String username = principal.getName();
-        log.debug("  username: " + username);
-
-        return userRepository.findUserByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
-    }
+//    private User getUserByPrincipal(Principal principal) {
+//        log.debug("");
+//        log.debug("Method getUserByPrincipal()");
+//        log.debug("  principal: " + principal);
+//
+//        String username = principal.getName();
+//        log.debug("  username: " + username);
+//
+//        return userRepository.findUserByUsername(username)
+//                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+//    }
 }
