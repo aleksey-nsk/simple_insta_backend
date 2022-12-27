@@ -3,12 +3,14 @@ package com.example.simple_insta_backend.controller;
 // Этот REST-контроллер нужен для проверки авторизации
 
 import lombok.extern.log4j.Log4j2;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/hello")
+@CrossOrigin
 @Log4j2
 public class HelloController {
 

@@ -15,7 +15,6 @@
             <column name="firstname" type="varchar(50)"/>
             <column name="lastname" type="varchar(50)"/>
             <column name="bio" type="varchar(100)"/>
-            <column name="birth_date" type="date"/>
             <column name="created_date" type="timestamp"/>
         </createTable>
     </changeSet>

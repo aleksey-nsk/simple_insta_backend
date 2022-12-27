@@ -14,9 +14,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-// Именно этот класс является конфигурацией для аутентификации и авторизации
+// Именно этот класс является конфигурацией
+// для АУТЕНТИФИКАЦИИ и АВТОРИЗАЦИИ
 
-//@Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
         securedEnabled = true,
@@ -30,22 +30,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private CustomUserDetailsService customUserDetailsService;
 
     @Autowired
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
-    // Этот энкодер будет кодировать пароли
-    // В БД будут лежать закодированные пароли
+    // Задаём как шифровать пароли.
+    // В БД будут лежать зашифрованные пароли
     @Bean
     BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    //    @Override
     @Bean(BeanIds.AUTHENTICATION_MANAGER)
     protected AuthenticationManager authenticationManager() throws Exception {
         return super.authenticationManager();
     }
 
-    // Настройка аутентификации
+    // Настройка АУТЕНТИФИКАЦИИ
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         log.debug("");
@@ -53,46 +55,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(customUserDetailsService).passwordEncoder(bCryptPasswordEncoder());
     }
 
-//    @Bean
-//    public JwtAuthenticationFilter jwtAuthenticationFilter() {
-//        return new JwtAuthenticationFilter();
-//    }
-
-    @Autowired
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
-
-    // Настройка авторизации
+    // Настройка АВТОРИЗАЦИИ
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         log.debug("");
         log.debug("НАСТРОЙКА АВТОРИЗАЦИИ");
-        log.debug("");
 
-        http
-                // .cors().and()
-                .csrf().disable() // отключаем csrf
+        http.cors()
+                .and().csrf().disable() // отключаем CSRF
 
-                // Кто будет разбираться с ошибкой если появится
+                // Кто будет разбираться с ошибкой, если она появится
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
 
-                // отключаем сессии
+                // Отключаем сессии
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
                 .and()
                 .authorizeRequests()
-                .antMatchers(SecurityConstants.AUTH_URLS).permitAll() // сюда есть доступ у всех
-                .antMatchers("/api/v1/hello").permitAll()
+                .antMatchers(SecurityConstants.AUTH_URLS).permitAll() // доступ всем, в том числе неаутентифицированным
+                .anyRequest().authenticated(); // все остальные урлы должны быть аутентифицированы
 
-//                .antMatchers("/api/v1/admin").hasAuthority("ROLE_ADMIN")
-//                .antMatchers("/api/v1/user").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
-//                .antMatchers("/api/v1/admin").hasRole("ADMIN")
-//                .antMatchers("/api/v1/user").hasAnyRole("USER", "ADMIN")
-
-                .anyRequest().authenticated(); // все остальные урлы должны быть авторизированы
-
-//        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-
-        // Добавляем наш фильтр jwtAuthenticationFilter перед фильтром UsernamePasswordAuthenticationFilter
+        // Добавляем наш фильтр перед фильтром UsernamePasswordAuthenticationFilter
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }

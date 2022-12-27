@@ -9,9 +9,4 @@ public class JwtTokenSuccessResponse {
 
     private boolean success;
     private String token;
-
-//    public JWTTokenSuccessResponse(boolean b, String jwt) {
-//    }
-
-
 }

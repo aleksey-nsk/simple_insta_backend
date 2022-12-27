@@ -27,4 +27,12 @@ public class Like {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "post_id")
     private Post post;
+
+    @Override
+    public String toString() {
+        return "Like{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                '}';
+    }
 }

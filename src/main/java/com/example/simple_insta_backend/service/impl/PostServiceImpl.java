@@ -11,7 +11,6 @@ import com.example.simple_insta_backend.service.PostService;
 import com.example.simple_insta_backend.service.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -61,7 +60,7 @@ public class PostServiceImpl implements PostService {
     public List<Post> getAllPostsForUser(Principal principal) {
         log.debug("");
         log.debug("Method getAllPostsForUser()");
-        log.debug("  principal: " + principal);
+//        log.debug("  principal: " + principal);
 
 //        User user = getUserByPrincipal(principal);
         User user = userService.getUserByPrincipal(principal);
@@ -173,6 +172,12 @@ public class PostServiceImpl implements PostService {
                 .forEach(comment -> {
                     log.debug("  Удалим комментарий с commentId=" + comment.getId());
                     commentRepository.deleteById(comment.getId());
+                });
+
+        post.getLikes()
+                .forEach(like -> {
+                    log.debug("  Удалим лайк с likeId=" + like.getId());
+                    likeRepository.deleteById(like.getId());
                 });
 
         log.debug("  Удалим сам post");

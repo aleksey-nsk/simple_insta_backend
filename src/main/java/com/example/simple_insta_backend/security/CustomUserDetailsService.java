@@ -14,10 +14,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-// Далее будем использовать этот класс в SecurityConfig,
-// а именно в AuthenticationManagerBuilder
+// Аутентификация с пользовательским UserDetailsService.
 //
-// CustomUserDetailsService помогает доставать юзера из БД
+// Мы переопределяем метод loadUserByUsername(), чтобы Spring Security понимал,
+// как взять пользователя по его имени из хранилища.
+// Имея этот метод, Spring Security может сравнить переданный пароль с настоящим
+// и аутентифицировать пользователя (либо не аутентифицировать).
 
 @Service
 @Log4j2
@@ -26,14 +28,15 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-    // Мы со стороны клиента будем передавать
-    // username и password
+    // Реализовать извлечение пользователя из БД
     @Override
     public UserDetails loadUserByUsername(String username) {
         log.debug("");
         log.debug("Method loadUserByUsername()");
+        log.debug("  username: " + username);
 
-        User user = userRepository.findUserByUsername(username)
+        User user = userRepository
+                .findUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
         log.debug("  user: " + user);
 
@@ -53,14 +56,12 @@ public class CustomUserDetailsService implements UserDetailsService {
         return buildUser;
     }
 
-    // Создадим ещё один метод
     public User loadUserById(Long id) {
         log.debug("");
         log.debug("Method loadUserById()");
         log.debug("  id: " + id);
 
         User user = userRepository.findUserById(id).orElse(null);
-//        log.debug("  user: " + user);
 
         if (user != null) {
             log.debug("  roles: " + user.getRoles());
@@ -68,26 +69,11 @@ public class CustomUserDetailsService implements UserDetailsService {
             List<GrantedAuthority> authorities = user.getRoles().stream()
                     .map(role -> new SimpleGrantedAuthority(role.name()))
                     .collect(Collectors.toList());
-            user.setAuthorities(authorities);
 
+            user.setAuthorities(authorities);
             log.debug("  authorities: " + user.getAuthorities());
         }
 
         return user;
     }
-
-//    public static User build(User user) {
-//        List<GrantedAuthority> authorities = user.getRoles().stream()
-//                .map(userRole -> new SimpleGrantedAuthority(userRole.toString()))
-//                .collect(Collectors.toList());
-//
-//        return new User(
-//                user.getId(),
-//                user.getUsername(),
-//                user.getEmail(),
-//                user.getPassword(),
-//                authorities
-//        );
-//    }
-
 }

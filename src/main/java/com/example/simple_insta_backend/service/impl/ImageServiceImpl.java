@@ -53,7 +53,7 @@ public class ImageServiceImpl implements ImageService {
         log.debug("");
         log.debug("Method uploadImageToUser()");
         log.debug("  file" + file);
-        log.debug("  principal" + principal);
+//        log.debug("  principal" + principal);
 
         User user = userService.getUserByPrincipal(principal);
         log.debug("  user" + user);
@@ -115,7 +115,7 @@ public class ImageServiceImpl implements ImageService {
     public Image getImageToUser(Principal principal) {
         log.debug("");
         log.debug("Method getImageToUser()");
-        log.debug("  principal" + principal);
+//        log.debug("  principal" + principal);
 
         User user = userService.getUserByPrincipal(principal);
         log.debug("  user" + user);

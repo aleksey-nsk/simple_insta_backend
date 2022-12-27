@@ -17,7 +17,7 @@ import java.util.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User implements UserDetails {
+public class User implements UserDetails { // имплементируем UserDetails
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,9 +41,6 @@ public class User implements UserDetails {
 
     @Column(name = "bio", columnDefinition = "text") // сохранять объёмные тексты
     private String bio;
-
-    @Column(name = "birth_date")
-    private LocalDate birthDate;
 
     // Отслеживаем когда был создан тот или иной объект
     @Column(name = "created_date", nullable = false, updatable = false)
@@ -71,7 +68,7 @@ public class User implements UserDetails {
     // ЧТО ЭТО?
     //
     @Transient
-    private Collection<? extends GrantedAuthority> authorities;
+    private Collection<? extends GrantedAuthority> authorities; // "authorities" - права
 
     // ДОБАВИЛИ НОВЫЙ КОНСТРУКТОР
 //    public User(Long id, String username, String password, String email, Collection<? extends GrantedAuthority> authorities) {

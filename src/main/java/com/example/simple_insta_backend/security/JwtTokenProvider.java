@@ -10,13 +10,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-// Данный класс будет создавать наш токен
+// Для работы с JWT-токеном используем библиотеку JJWT (Java JWT: JSON Web Token for Java and Android).
+// Во всех методах извлечения данных JWT-токен заодно проверяется на предмет, не истёк ли он, и валидна ли подпись.
 
 @Component
 @Log4j2
 public class JwtTokenProvider {
 
-    // Генерация jwt-токена
+    // Генерация токена
     public String generateToken(Authentication authentication) {
         log.debug("");
         log.debug("Method generateToken()");
@@ -25,13 +26,13 @@ public class JwtTokenProvider {
         log.debug("  user: " + user);
 
         Date now = new Date(System.currentTimeMillis()); // текущее время
-        Date expiration = new Date(now.getTime() + SecurityConstants.EXPIRATION_TIME); // когда токен иссякнет
+        Date expiration = new Date(now.getTime() + SecurityConstants.EXPIRATION_TIME); // когда токен протухнет
         log.debug("  now: " + now);
         log.debug("  expiration: " + expiration);
 
         String userId = Long.toString(user.getId());
 
-        // Далее будем создавать claims. Этот как раз тот объект который будем передавать в JSON Web Token-е
+        // Далее будем создавать claims -> это как раз тот объект, который будем передавать в JSON Web Token-е.
         // Он и будет содержать данные юзера
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", userId);
@@ -40,8 +41,7 @@ public class JwtTokenProvider {
         claims.put("lastname", user.getLastname());
         log.debug("  claims: " + claims);
 
-        // Используем библиотеку io.jsonwebtoken
-        // для построения токена
+        // Используем библиотеку io.jsonwebtoken для построения токена
         String compact = Jwts.builder()
                 .setSubject(userId)
                 .addClaims(claims)
@@ -65,16 +65,17 @@ public class JwtTokenProvider {
             Jws<Claims> claimsJws = Jwts.parser()
                     .setSigningKey(SecurityConstants.SECRET_KEY)
                     .parseClaimsJws(token);
-            log.debug("  OK");
+            log.debug("  токен валидный");
             return true;
         } catch (SignatureException | MalformedJwtException | ExpiredJwtException |
                 UnsupportedJwtException | IllegalArgumentException e) {
             log.error(e.getMessage());
+            log.error("  токен не валидный");
             return false;
         }
     }
 
-    // Напишем последний метод, который будет брать данные (в данном случае id) из токена
+    // Получить id из токена
     public Long getUserIdFromToken(String token) {
         log.debug("");
         log.debug("Method getUserIdFromToken()");

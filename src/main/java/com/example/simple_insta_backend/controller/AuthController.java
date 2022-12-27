@@ -1,8 +1,5 @@
 package com.example.simple_insta_backend.controller;
 
-// Этот контроллер будет отвечать
-// за авторизацию пользователей
-
 import com.example.simple_insta_backend.entity.User;
 import com.example.simple_insta_backend.payload.request.LoginRequest;
 import com.example.simple_insta_backend.payload.request.SignupRequest;
@@ -21,20 +18,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-// Контроллер отвечающий за регистрацию
-// и аутентификацию
+// Контроллер отвечающий за РЕГИСТРАЦИЮ и АУТЕНТИФИКАЦИЮ
 
-//@CrossOrigin // что это???
 @RestController
 @RequestMapping("/api/v1/auth")
-//@PreAuthorize("permitAll()") // что это???
+@CrossOrigin
 @Log4j2
 public class AuthController {
 
@@ -50,7 +42,7 @@ public class AuthController {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
-    // При регистрации будем засылать /api/v1/auth/signup
+    // РЕГИСТРАЦИЯ юзера
     @PostMapping("/signup")
     public ResponseEntity<Object> registerUser(@RequestBody @Valid SignupRequest signupRequest, BindingResult bindingResult) {
         log.debug("");
@@ -58,20 +50,19 @@ public class AuthController {
         log.debug("  signupRequest: " + signupRequest);
         log.debug("  bindingResult: " + bindingResult);
 
-        // Принимаем BindingResult и сразу смотрим, есть ли в нём какие-нибудь ошибки
+        // Принимаем BindingResult и сразу смотрим, есть ли в нём какие-нибудь ошибки.
         // Валидируем объект SignupRequest
         ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindingResult);
         if (!ObjectUtils.isEmpty(errors)) return errors;
 
-        // Мы регистрируемся, поэтому самого юзера
-        // на UI возвращать не будем
         User created = userService.createUser(signupRequest);
         log.debug("  created: " + created);
 
+        // Мы регистрируемся, поэтому самого юзера на UI возвращать не будем
         return ResponseEntity.ok(new MessageResponse("User registered successfully"));
     }
 
-    // Аутентификация юзера:
+    // АУТЕНТИФИКАЦИЯ юзера
     @PostMapping("/signin")
     public ResponseEntity<Object> authenticateUser(@RequestBody @Valid LoginRequest loginRequest, BindingResult bindingResult) {
         log.debug("");
@@ -79,7 +70,7 @@ public class AuthController {
         log.debug("  loginRequest: " + loginRequest);
         log.debug("  bindingResult: " + bindingResult);
 
-        // Здесь валидируем объект LoginRequest
+        // Валидируем объект LoginRequest
         ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindingResult);
         if (!ObjectUtils.isEmpty(errors)) return errors;
 
@@ -94,7 +85,7 @@ public class AuthController {
         String jwt = SecurityConstants.TOKEN_PREFIX + jwtTokenProvider.generateToken(authentication);
         log.debug("  jwt: " + jwt);
 
-        // Это передаём на клиент (на Ангуляр)
+        // Это передаём на клиент (на Angular)
         return ResponseEntity.ok(new JwtTokenSuccessResponse(true, jwt));
     }
 }

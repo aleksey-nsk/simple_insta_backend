@@ -12,11 +12,11 @@ import org.springframework.validation.ObjectError;
 import java.util.HashMap;
 import java.util.Map;
 
-// Данный валидатор поможет справляться
-// с теми или иными ошибками, которые будут приходить на наш сервер
+// Данный валидатор поможет справляться с теми или иными ошибками,
+// которые будут приходить на наш сервер.
 //
 // Данным сервисом-валидатором можем пользоваться в любом контроллере
-// для валидации тех или иных ошибок
+// для валидации тех или иных ошибок.
 
 @Service
 @Log4j2
@@ -27,9 +27,9 @@ public class ResponseErrorValidation {
         log.debug("Method mapValidationService()");
         log.debug("  bindingResult: " + bindingResult);
 
-        // Объект типа BindingResult будет содержать в себе ошибки
-        // Например пришёл объект типа LoginRequest с пустым username
-        // ты будет ошибка @NotEmpty(message = "Username cannot be empty")
+        // Объект типа BindingResult будет содержать в себе ошибки.
+        // Например, если пришёл объект типа LoginRequest с пустым username
+        // то будет ошибка @NotEmpty(message = "Username cannot be empty")
         // Ошибка попадёт именно в объект BindingResult
 
         if (bindingResult.hasErrors()) {
@@ -48,7 +48,6 @@ public class ResponseErrorValidation {
             }
 
             log.debug("  errorMap: " + errorMap);
-
             return new ResponseEntity<>(errorMap, HttpStatus.BAD_REQUEST);
         }
 

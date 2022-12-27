@@ -17,6 +17,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 
+// Данный класс - это фильтр, проверяющий JWT-токен при каждом запросе.
+//
+// После того, как JWT-токен выдан, клиент его отправляет при каждом запросе.
+// И проверять этот токен надо при каждом запросе (и извлекать из него имя пользователя).
+// Для этого используем данный фильтр (он расширяет OncePerRequestFilter).
+
 @Component
 @Log4j2
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -45,7 +51,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 // Посмотрим есть ли юзер в БД с таким id
                 User userDetails = customUserDetailsService.loadUserById(userId);
-//                log.debug("  userDetails: " + userDetails);
 
                 // Главное передать данные юзера
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
@@ -59,19 +64,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 // Всё прошло нормально. Можем аутентифицировать пользователя
             }
 
-        } catch (Exception e) {
-            // Что-то пошло не так. Выскочила ошибка. Не можем задать аутентификацию пользователя
+        } catch (Exception e) { // что-то пошло не так. Выскочила ошибка. Не можем задать аутентификацию пользователя
             e.printStackTrace();
             log.error("Could not set user authentication");
         }
 
-        // Добавим наш фильтр в цепочку фильтров
-        // Т.е. мы как бы внедрились в процесс запросов и ответов
+        // Добавим наш фильтр в цепочку фильтров.
+        // То есть мы как бы внедрились в процесс запросов и ответов
         filterChain.doFilter(request, response);
     }
 
-    // Метод который будет помогоать брать JWT токен прямо из запроса,
-    // который будет поступать к нам на сервер
+    // Метод, который будет помогать извлекать JWT токен прямо из запроса,
+    // поступающего к нам на сервер
     private String getJwtFromRequest(HttpServletRequest request) {
         log.debug("");
         log.debug("Method getJwtFromRequest()");
