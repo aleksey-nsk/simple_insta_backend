@@ -1,6 +1,6 @@
 # Info
 
-Учебная задача "Simple Instagram".  
+Учебная задача **Simple Instagram**.  
 Проект состоит из репозиториев:  
 - Backend (данный репозиторий)  
 - [Frontend](https://github.com/aleksey-nsk/simple-insta-frontend)  
