@@ -37,11 +37,9 @@ public class JwtTokenProvider {
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", userId);
         claims.put("username", user.getUsername());
-//        claims.put("firstname", user.getFirstname());
-//        claims.put("lastname", user.getLastname());
         log.debug("  claims: " + claims);
 
-        // Используем библиотеку io.jsonwebtoken для построения токена
+        // Используем библиотеку JJWT для построения токена
         String compact = Jwts.builder()
                 .setSubject(userId)
                 .addClaims(claims)
@@ -58,7 +56,6 @@ public class JwtTokenProvider {
     public boolean validateToken(String token) {
         log.debug("");
         log.debug("Method validateToken()");
-//        log.debug("  token: " + token);
 
         try {
             // Пытаемся спарсить токен и взять из него claims
@@ -67,8 +64,11 @@ public class JwtTokenProvider {
                     .parseClaimsJws(token);
             log.debug("  токен валидный");
             return true;
-        } catch (SignatureException | MalformedJwtException | ExpiredJwtException |
-                UnsupportedJwtException | IllegalArgumentException e) {
+        } catch (SignatureException |
+                MalformedJwtException |
+                ExpiredJwtException |
+                UnsupportedJwtException |
+                IllegalArgumentException e) {
             log.error("  " + e.getMessage());
             log.error("  токен не валидный");
             return false;

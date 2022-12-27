@@ -20,7 +20,7 @@ import java.util.Collections;
 // Данный класс - это фильтр, проверяющий JWT-токен при каждом запросе.
 //
 // После того, как JWT-токен выдан, клиент его отправляет при каждом запросе.
-// И проверять этот токен надо при каждом запросе (и извлекать из него имя пользователя).
+// И проверять этот токен надо при каждом запросе (и извлекать из него данные пользователя).
 // Для этого используем данный фильтр (он расширяет OncePerRequestFilter).
 
 @Component
@@ -34,18 +34,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private CustomUserDetailsService customUserDetailsService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
         try {
             String jwt = getJwtFromRequest(request);
 
             if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
                 Long userId = jwtTokenProvider.getUserIdFromToken(jwt);
-//                log.debug("  userId: " + userId);
 
-                // Посмотрим есть ли юзер в БД с таким id
+                // Посмотрим есть ли юзер с таким id в БД
                 User userDetails = customUserDetailsService.loadUserById(userId);
 
-                // Главное передать данные юзера
+                // Передаём данные юзера
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails, null, Collections.emptyList()
                 );

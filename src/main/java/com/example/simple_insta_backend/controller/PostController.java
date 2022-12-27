@@ -53,7 +53,9 @@ public class PostController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Object> createPost(@RequestBody @Valid PostDto postDto, BindingResult bindingResult, Principal principal) {
+    public ResponseEntity<Object> createPost(@RequestBody @Valid PostDto postDto,
+                                             BindingResult bindingResult,
+                                             Principal principal) {
         ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindingResult);
         if (!ObjectUtils.isEmpty(errors)) return errors;
 
@@ -63,7 +65,8 @@ public class PostController {
     }
 
     @PostMapping("/{postId}/{username}/like")
-    public ResponseEntity<PostDto> likePost(@PathVariable("postId") String postId, @PathVariable("username") String username) {
+    public ResponseEntity<PostDto> likePost(@PathVariable("postId") String postId,
+                                            @PathVariable("username") String username) {
         Post likedPost = postService.likePost(Long.parseLong(postId), username);
         PostDto likedPostDto = postFacade.postToPostDto(likedPost);
         return new ResponseEntity<>(likedPostDto, HttpStatus.OK);

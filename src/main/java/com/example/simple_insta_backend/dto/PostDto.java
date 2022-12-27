@@ -6,8 +6,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
-// PostDto будем передавать или принимать с фронта
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,8 +16,6 @@ public class PostDto {
     private String caption;
     private String location;
     private String username;
-
     private Integer likes;
     private Set<String> usersLiked;
-
 }

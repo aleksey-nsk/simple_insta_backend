@@ -47,7 +47,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManager();
     }
 
-    // Настройка АУТЕНТИФИКАЦИИ
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         log.debug("");
@@ -55,7 +54,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(customUserDetailsService).passwordEncoder(bCryptPasswordEncoder());
     }
 
-    // Настройка АВТОРИЗАЦИИ
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         log.debug("");

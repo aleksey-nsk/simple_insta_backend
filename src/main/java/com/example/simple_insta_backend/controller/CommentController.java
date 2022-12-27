@@ -43,8 +43,10 @@ public class CommentController {
     }
 
     @PostMapping("/{postId}/create")
-    public ResponseEntity<Object> createComment(@RequestBody @Valid CommentDto commentDto, @PathVariable("postId") String postId,
-                                                BindingResult bindingResult, Principal principal) {
+    public ResponseEntity<Object> createComment(@RequestBody @Valid CommentDto commentDto,
+                                                @PathVariable("postId") String postId,
+                                                BindingResult bindingResult,
+                                                Principal principal) {
         ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindingResult);
         if (!ObjectUtils.isEmpty(errors)) return errors;
 

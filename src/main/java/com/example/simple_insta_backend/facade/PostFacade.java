@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Component // так как будем потом делать его инжекцию в .... ???
+@Component
 @Log4j2
 public class PostFacade {
 
@@ -33,11 +33,10 @@ public class PostFacade {
             postDto.setLikes(likes.size());
         }
 
-        // postDto.setUsersLiked(post.getLikedUsers());
-        Set<String> usersLiked = post.getLikes().stream()
+        Set<String> usersLiked = post.getLikes()
+                .stream()
                 .map(like -> like.getUsername())
                 .collect(Collectors.toSet());
-//        log.debug("  usersLiked: " + usersLiked);
         postDto.setUsersLiked(usersLiked);
 
         log.debug("  postDto: " + postDto);

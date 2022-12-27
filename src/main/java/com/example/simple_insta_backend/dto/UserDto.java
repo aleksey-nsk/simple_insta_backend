@@ -6,8 +6,8 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 
-// Этот объект мы будет передавать на клиента и принимать.
-// А раз будем принимать => то сделаем дополнительную валидацию
+// Этот объект мы будет передавать на клиента и принимать от клиента.
+// А раз будем принимать => то сделаем дополнительную валидацию.
 
 @Data
 @NoArgsConstructor
@@ -16,7 +16,6 @@ public class UserDto {
 
     private Long id;
 
-//    @NotEmpty
     private String username;
 
     @NotEmpty

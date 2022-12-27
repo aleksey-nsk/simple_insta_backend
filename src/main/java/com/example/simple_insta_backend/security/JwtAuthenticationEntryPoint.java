@@ -13,9 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-// Этот класс будет возвращать нам объект, который будет содержать что
-// параметры, которые мы внесли, не правильные.
-// Т.е. этот класс будет служить для того чтобы ловить ошибку аутентификации
+// Этот класс будет возвращать нам объект, который будет содержать
+// информацию о том, что параметры, которые мы внесли, не правильные.
+//
+// То есть этот класс будет служить для того, чтобы ловить ошибку аутентификации
 // и выдавать статус 401
 
 @Component
@@ -23,7 +24,9 @@ import java.io.IOException;
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+    public void commence(HttpServletRequest request,
+                         HttpServletResponse response,
+                         AuthenticationException authException) throws IOException, ServletException {
         log.error("");
         log.error("JwtAuthenticationEntryPoint -> method commence()");
         log.error("  " + authException.getMessage());
@@ -34,7 +37,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         // response - объект, который будет возвращаться клиенту
         response.setContentType(SecurityConstants.CONTENT_TYPE);
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        response.setStatus(HttpStatus.UNAUTHORIZED.value()); // UNAUTHORIZED 401
         response.getWriter().println(jsonInvalidResponse);
     }
 }

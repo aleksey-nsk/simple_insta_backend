@@ -125,6 +125,7 @@ public class PostServiceImpl implements PostService {
         like.setPost(post);
         Like savedLike = likeRepository.save(like);
         log.debug("  savedLike: " + savedLike);
+
         return post;
     }
 
@@ -142,19 +143,17 @@ public class PostServiceImpl implements PostService {
 
         log.debug("");
 
-        post.getComments()
-                .forEach(comment -> {
-                    log.debug("  Удалим комментарий с commentId=" + comment.getId());
-                    commentRepository.deleteById(comment.getId());
-                });
+        post.getComments().forEach(comment -> {
+            log.debug("  Удалим комментарий с commentId=" + comment.getId());
+            commentRepository.deleteById(comment.getId());
+        });
 
-        post.getLikes()
-                .forEach(like -> {
-                    log.debug("  Удалим лайк с likeId=" + like.getId());
-                    likeRepository.deleteById(like.getId());
-                });
+        post.getLikes().forEach(like -> {
+            log.debug("  Удалим лайк с likeId=" + like.getId());
+            likeRepository.deleteById(like.getId());
+        });
 
-        log.debug("  Удалим сам post");
+        log.debug("  Удалим сам пост");
         postRepository.delete(post);
 
         Optional<Image> optionalImage = imageRepository.findByPostId(postId);

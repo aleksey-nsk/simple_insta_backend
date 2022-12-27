@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUser(UserDto userDto, Principal principal) {
         log.debug("");
-        log.debug("Method updateUser()");
+        log.debug("Обновить юзера");
         log.debug("  userDto: " + userDto);
 
         User user = getUserByPrincipal(principal);

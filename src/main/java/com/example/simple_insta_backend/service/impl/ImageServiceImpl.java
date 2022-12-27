@@ -5,13 +5,10 @@ import com.example.simple_insta_backend.entity.Post;
 import com.example.simple_insta_backend.entity.User;
 import com.example.simple_insta_backend.exception.ImageNotFoundException;
 import com.example.simple_insta_backend.repository.ImageRepository;
-import com.example.simple_insta_backend.repository.PostRepository;
-import com.example.simple_insta_backend.repository.UserRepository;
 import com.example.simple_insta_backend.service.ImageService;
 import com.example.simple_insta_backend.service.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,9 +23,9 @@ import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
 // Сервис, который будет создавать картинку
-// для поста, либо для юзера
+// для поста, либо для юзера.
 //
-// И возвращать картинку
+// И возвращать картинку.
 
 @Service
 @Log4j2
@@ -38,28 +35,15 @@ public class ImageServiceImpl implements ImageService {
     private ImageRepository imageRepository;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private UserService userService;
 
-    // Это походу не используем
-//    @Autowired
-//    private PostRepository postRepository;
-
-    // Метод чтобы загрузить фотографию для профиля пользователя
     @Override
     public Image uploadImageToUser(MultipartFile file, Principal principal) throws IOException {
         log.debug("");
         log.debug("Загрузить фото в профиль юзера");
         log.debug("  Выбран ли файл с картинкой для загрузки: " + !file.isEmpty());
-//        log.debug("  principal" + principal);
-
 
         User user = userService.getUserByPrincipal(principal);
-//        log.debug("  user" + user);
-
-//        log.info("  Uploading image profile to User: {}", user.getUsername());
 
         Image userProfileImage = imageRepository.findByUserId(user.getId()).orElse(null);
         log.debug("");
@@ -77,23 +61,19 @@ public class ImageServiceImpl implements ImageService {
         log.debug("");
         log.debug("  image: " + image);
 
-//        log.debug("  Uploading image to User: {}", user.getUsername());
         Image savedImg = imageRepository.save(image);
         log.debug("  savedImg: " + savedImg);
         return savedImg;
     }
 
-    // Загрузить картинку для поста
     @Override
     public Image uploadImageToPost(MultipartFile file, Principal principal, Long postId) throws IOException {
         log.debug("");
         log.debug("Загрузить картинку посту");
         log.debug("  postId: " + postId);
         log.debug("  Выбран ли файл с картинкой для загрузки: " + !file.isEmpty());
-//        log.debug("  principal" + principal);
 
         User user = userService.getUserByPrincipal(principal);
-//        log.debug("  user" + user);
 
         Post post = user.getPosts()
                 .stream()
@@ -109,21 +89,17 @@ public class ImageServiceImpl implements ImageService {
         log.debug("");
         log.debug("  image: " + image);
 
-//        log.info("  Uploading image to Post: {}", post.getId());
         Image savedImg = imageRepository.save(image);
         log.debug("  savedImg: " + savedImg);
         return savedImg;
     }
 
-    // Вернуть фотографию пользователя
     @Override
     public Image getUserImage(Principal principal) {
         log.debug("");
         log.debug("Получить фото юзера");
-//        log.debug("  principal" + principal);
 
         User user = userService.getUserByPrincipal(principal);
-//        log.debug("  user" + user);
 
         Image image = imageRepository.findByUserId(user.getId()).orElse(null);
         log.debug("");
@@ -146,7 +122,8 @@ public class ImageServiceImpl implements ImageService {
         log.debug("Получить картинку поста");
         log.debug("  postId: " + postId);
 
-        Image image = imageRepository.findByPostId(postId)
+        Image image = imageRepository
+                .findByPostId(postId)
                 .orElseThrow(() -> new ImageNotFoundException("Cannot find image for Post: " + postId));
         log.debug("  image: " + image);
 
@@ -161,12 +138,9 @@ public class ImageServiceImpl implements ImageService {
         return image;
     }
 
-    // Нужен метод который вернёт только один единственный пост для пользователя.
-    // (у юзера может быть много постов)
+    // Метод, который вернёт один единственный пост
+    // для пользователя (у юзера может быть много постов)
     private <T> Collector<T, ?, T> toSinglePostCollector() {
-//        log.debug("");
-//        log.debug("Method toSinglePostCollector()");
-
         return Collectors.collectingAndThen(Collectors.toList(), list -> {
             if (list.size() != 1) {
                 throw new IllegalStateException();
@@ -177,7 +151,7 @@ public class ImageServiceImpl implements ImageService {
 
     // Вспомогательный методы для компрессии картинок.
     // Перед тем как сохранить файл картинки в БД, мы будем делать компрессию,
-    // т.е. уменьшать количество байтов в файле
+    // то есть уменьшать количество байтов в файле
     private byte[] compressBytes(byte[] data) {
         log.debug("");
         log.debug("  Method compressBytes()");
@@ -228,17 +202,4 @@ public class ImageServiceImpl implements ImageService {
         log.debug("    Decompress Size - " + decompress.length);
         return decompress;
     }
-
-    // Вспомогательный метод: достать юзера из объекта Principal
-//    private User getUserByPrincipal(Principal principal) {
-//        log.debug("");
-//        log.debug("Method getUserByPrincipal()");
-//        log.debug("  principal: " + principal);
-//
-//        String username = principal.getName();
-//        log.debug("  username: " + username);
-//
-//        return userRepository.findUserByUsername(username)
-//                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
-//    }
 }
