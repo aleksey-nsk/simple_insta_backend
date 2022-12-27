@@ -18,10 +18,7 @@ public class Like {
     @Column(name = "id")
     private Long id;
 
-//    @Column(name = "user_id", nullable = false)
-//    private Long userId;
-
-    @Column(name = "username", nullable = false)
+    @Column(name = "username")
     private String username;
 
     @ManyToOne(fetch = FetchType.EAGER)

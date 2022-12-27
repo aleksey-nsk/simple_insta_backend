@@ -9,7 +9,6 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="likes_pk"/>
             </column>
-            <!-- <column name="user_id" type="bigint"/> -->
             <column name="username" type="varchar(50)"/>
             <column name="post_id" type="bigint"/>
         </createTable>

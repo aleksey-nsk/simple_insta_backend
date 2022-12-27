@@ -1,15 +1,15 @@
-# At which port is application running on
+# На каком порту стартует приложение
 server:
     port: 8082
 
-# Logging settings
+# Настройки логирования
 logging:
     level:
         com.example.simple_insta_backend: debug
     file:
         name: logs/app.log
 
-# Database settings
+# Настройки БД
 spring:
     datasource:
         driver-class-name: org.postgresql.Driver

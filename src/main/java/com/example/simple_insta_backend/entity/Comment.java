@@ -19,21 +19,13 @@ public class Comment {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "message", columnDefinition = "text", nullable = false)
+    @Column(name = "message")
     private String message;
 
-    @Column(name = "created_date", nullable = false, updatable = false)
+    @Column(name = "created_date")
     private LocalDateTime createdDate;
 
-//    @PrePersist
-//    protected void onCreate() {
-//        this.createdDate = LocalDateTime.now();
-//    }
-
-    // Юзер сделавший комент
-//    @Column(name = "user_id", nullable = false)
-//    private Long userId;
-    @Column(name = "username", nullable = false)
+    @Column(name = "username")
     private String username;
 
     @ManyToOne(fetch = FetchType.EAGER)

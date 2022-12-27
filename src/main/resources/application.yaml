@@ -1,4 +1,4 @@
-# Set active profile
+# Задаём активный профиль
 spring:
     profiles:
         active: dev

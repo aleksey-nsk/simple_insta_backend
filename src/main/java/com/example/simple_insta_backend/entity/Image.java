@@ -6,9 +6,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-// Нет прямой зависимости.
-// Будем сохранять изображение либо юзеру (тогда задаём userId, а postId=null)
-// Либо сохраняем посту (тогда задаём postId, а userId=null)
+// Нет прямой связи.
+// Будем сохранять изображение либо юзеру (тогда задаём userId, а postId=null).
+// Либо сохраняем изображение посту (тогда задаём postId, а userId=null).
 
 @Entity
 @Table(name = "images")
@@ -22,14 +22,12 @@ public class Image {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "title")
     private String title;
 
-    //    @JsonIgnore // не передавать на клиента
     @Column(name = "user_id")
     private Long userId;
 
-    //    @JsonIgnore
     @Column(name = "post_id")
     private Long postId;
 
