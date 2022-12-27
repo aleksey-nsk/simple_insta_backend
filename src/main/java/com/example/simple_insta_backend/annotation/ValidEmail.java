@@ -8,7 +8,7 @@ import java.lang.annotation.*;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.TYPE, ElementType.ANNOTATION_TYPE})
-@Constraint(validatedBy = EmailValidator.class) // валидатор свой создадим
+@Constraint(validatedBy = EmailValidator.class)
 @Documented
 public @interface ValidEmail {
 

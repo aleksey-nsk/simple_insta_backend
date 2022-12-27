@@ -8,7 +8,7 @@ import java.lang.annotation.*;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
-@Constraint(validatedBy = UniqueUsernameValidator.class) // валидатор свой создадим
+@Constraint(validatedBy = UniqueUsernameValidator.class)
 @Documented
 public @interface UniqueUsername {
 

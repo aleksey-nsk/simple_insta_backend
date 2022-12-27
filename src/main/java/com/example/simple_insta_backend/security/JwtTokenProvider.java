@@ -20,7 +20,7 @@ public class JwtTokenProvider {
     // Генерация токена
     public String generateToken(Authentication authentication) {
         log.debug("");
-        log.debug("Method generateToken()");
+        log.debug("Сгенерируем JWT-токен");
 
         User user = (User) authentication.getPrincipal();
         log.debug("  user: " + user);
@@ -37,8 +37,8 @@ public class JwtTokenProvider {
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", userId);
         claims.put("username", user.getUsername());
-        claims.put("firstname", user.getFirstname());
-        claims.put("lastname", user.getLastname());
+//        claims.put("firstname", user.getFirstname());
+//        claims.put("lastname", user.getLastname());
         log.debug("  claims: " + claims);
 
         // Используем библиотеку io.jsonwebtoken для построения токена
@@ -58,7 +58,7 @@ public class JwtTokenProvider {
     public boolean validateToken(String token) {
         log.debug("");
         log.debug("Method validateToken()");
-        log.debug("  token: " + token);
+//        log.debug("  token: " + token);
 
         try {
             // Пытаемся спарсить токен и взять из него claims
@@ -69,7 +69,7 @@ public class JwtTokenProvider {
             return true;
         } catch (SignatureException | MalformedJwtException | ExpiredJwtException |
                 UnsupportedJwtException | IllegalArgumentException e) {
-            log.error(e.getMessage());
+            log.error("  " + e.getMessage());
             log.error("  токен не валидный");
             return false;
         }

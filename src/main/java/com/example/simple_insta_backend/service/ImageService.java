@@ -12,7 +12,7 @@ public interface ImageService {
 
     Image uploadImageToPost(MultipartFile file, Principal principal, Long postId) throws IOException;
 
-    Image getImageToUser(Principal principal);
+    Image getUserImage(Principal principal);
 
     Image getImageToPost(Long postId);
 }

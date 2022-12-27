@@ -64,9 +64,9 @@ public class PostController {
 
     @PostMapping("/{postId}/{username}/like")
     public ResponseEntity<PostDto> likePost(@PathVariable("postId") String postId, @PathVariable("username") String username) {
-        Post post = postService.likePost(Long.parseLong(postId), username);
-        PostDto postDto = postFacade.postToPostDto(post);
-        return new ResponseEntity<>(postDto, HttpStatus.OK);
+        Post likedPost = postService.likePost(Long.parseLong(postId), username);
+        PostDto likedPostDto = postFacade.postToPostDto(likedPost);
+        return new ResponseEntity<>(likedPostDto, HttpStatus.OK);
     }
 
     @PostMapping("/{postId}/delete")

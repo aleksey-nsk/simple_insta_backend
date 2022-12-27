@@ -1,7 +1,6 @@
 package com.example.simple_insta_backend.annotation;
 
 import com.example.simple_insta_backend.validator.UniqueEmailValidator;
-import com.example.simple_insta_backend.validator.UniqueUsernameValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

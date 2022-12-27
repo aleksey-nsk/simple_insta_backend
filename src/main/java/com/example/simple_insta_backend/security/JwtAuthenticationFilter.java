@@ -35,19 +35,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        log.debug("");
-        log.debug("Method doFilterInternal()");
-        log.debug("  request: " + request);
-        log.debug("  response: " + response);
-        log.debug("  filterChain: " + filterChain);
-
         try {
             String jwt = getJwtFromRequest(request);
-            log.debug("  jwt: " + jwt);
 
             if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
                 Long userId = jwtTokenProvider.getUserIdFromToken(jwt);
-                log.debug("  userId: " + userId);
+//                log.debug("  userId: " + userId);
 
                 // Посмотрим есть ли юзер в БД с таким id
                 User userDetails = customUserDetailsService.loadUserById(userId);
@@ -78,7 +71,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     // поступающего к нам на сервер
     private String getJwtFromRequest(HttpServletRequest request) {
         log.debug("");
-        log.debug("Method getJwtFromRequest()");
+        log.debug("Извлекаем JWT-токен из запроса");
 
         String bearToken = request.getHeader(SecurityConstants.HEADER_STRING);
         log.debug("  bearToken: " + bearToken);

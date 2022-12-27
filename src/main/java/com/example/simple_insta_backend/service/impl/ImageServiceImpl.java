@@ -51,20 +51,22 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public Image uploadImageToUser(MultipartFile file, Principal principal) throws IOException {
         log.debug("");
-        log.debug("Method uploadImageToUser()");
-        log.debug("  file" + file);
+        log.debug("Загрузить фото в профиль юзера");
+        log.debug("  Выбран ли файл с картинкой для загрузки: " + !file.isEmpty());
 //        log.debug("  principal" + principal);
 
-        User user = userService.getUserByPrincipal(principal);
-        log.debug("  user" + user);
 
-        log.info("  Uploading image profile to User: {}", user.getUsername());
+        User user = userService.getUserByPrincipal(principal);
+//        log.debug("  user" + user);
+
+//        log.info("  Uploading image profile to User: {}", user.getUsername());
 
         Image userProfileImage = imageRepository.findByUserId(user.getId()).orElse(null);
-        log.debug("  userProfileImage" + userProfileImage);
+        log.debug("");
+        log.debug("  userProfileImage: " + userProfileImage);
 
         if (!ObjectUtils.isEmpty(userProfileImage)) {
-            log.debug("  Фото у юзера уже есть. Значит сначала удалим старое. Потом загрузим новое");
+            log.debug("  Фото у юзера уже есть => сначала удалим старое, а потом загрузим новое");
             imageRepository.delete(userProfileImage);
         }
 
@@ -72,11 +74,12 @@ public class ImageServiceImpl implements ImageService {
         image.setTitle(file.getOriginalFilename());
         image.setImageBytes(compressBytes(file.getBytes())); // сжимаем картинку
         image.setUserId(user.getId());
-        log.debug("  image" + image);
+        log.debug("");
+        log.debug("  image: " + image);
 
-        log.info("Uploading image to User: {}", user.getUsername());
+//        log.debug("  Uploading image to User: {}", user.getUsername());
         Image savedImg = imageRepository.save(image);
-        log.debug("  savedImg" + savedImg);
+        log.debug("  savedImg: " + savedImg);
         return savedImg;
     }
 
@@ -84,44 +87,47 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public Image uploadImageToPost(MultipartFile file, Principal principal, Long postId) throws IOException {
         log.debug("");
-        log.debug("Method uploadImageToPost()");
-        log.debug("  file" + file);
+        log.debug("Загрузить картинку посту");
+        log.debug("  postId: " + postId);
+        log.debug("  Выбран ли файл с картинкой для загрузки: " + !file.isEmpty());
 //        log.debug("  principal" + principal);
-        log.debug("  postId" + postId);
 
         User user = userService.getUserByPrincipal(principal);
-        log.debug("  user" + user);
+//        log.debug("  user" + user);
 
         Post post = user.getPosts()
                 .stream()
                 .filter(p -> p.getId().equals(postId))
                 .collect(toSinglePostCollector());
-        log.debug("  post" + post);
+        log.debug("");
+        log.debug("  post: " + post);
 
         Image image = new Image();
         image.setTitle(file.getOriginalFilename());
         image.setImageBytes(compressBytes(file.getBytes())); // сжимаем картинку
         image.setPostId(post.getId());
-        log.debug("  image" + image);
+        log.debug("");
+        log.debug("  image: " + image);
 
-        log.info("  Uploading image to Post: {}", post.getId());
+//        log.info("  Uploading image to Post: {}", post.getId());
         Image savedImg = imageRepository.save(image);
-        log.debug("  savedImg" + savedImg);
+        log.debug("  savedImg: " + savedImg);
         return savedImg;
     }
 
     // Вернуть фотографию пользователя
     @Override
-    public Image getImageToUser(Principal principal) {
+    public Image getUserImage(Principal principal) {
         log.debug("");
-        log.debug("Method getImageToUser()");
+        log.debug("Получить фото юзера");
 //        log.debug("  principal" + principal);
 
         User user = userService.getUserByPrincipal(principal);
-        log.debug("  user" + user);
+//        log.debug("  user" + user);
 
         Image image = imageRepository.findByUserId(user.getId()).orElse(null);
-        log.debug("  image" + image);
+        log.debug("");
+        log.debug("  image: " + image);
 
         if (!ObjectUtils.isEmpty(image)) {
             byte[] initial = image.getImageBytes();
@@ -129,20 +135,20 @@ public class ImageServiceImpl implements ImageService {
             image.setImageBytes(result);
         }
 
-        log.debug("  image" + image);
+        log.debug("");
+        log.debug("  Вернуть изображение: " + image);
         return image;
     }
 
-    // Вернуть фотографию для поста
     @Override
     public Image getImageToPost(Long postId) {
         log.debug("");
-        log.debug("Method getImageToPost()");
-        log.debug("  postId" + postId);
+        log.debug("Получить картинку поста");
+        log.debug("  postId: " + postId);
 
         Image image = imageRepository.findByPostId(postId)
                 .orElseThrow(() -> new ImageNotFoundException("Cannot find image for Post: " + postId));
-        log.debug("  image" + image);
+        log.debug("  image: " + image);
 
         if (!ObjectUtils.isEmpty(image)) {
             byte[] initial = image.getImageBytes();
@@ -150,15 +156,16 @@ public class ImageServiceImpl implements ImageService {
             image.setImageBytes(result);
         }
 
-        log.debug("  image" + image);
+        log.debug("");
+        log.debug("  Вернуть картинку: " + image);
         return image;
     }
 
     // Нужен метод который вернёт только один единственный пост для пользователя.
     // (у юзера может быть много постов)
     private <T> Collector<T, ?, T> toSinglePostCollector() {
-        log.debug("");
-        log.debug("Method toSinglePostCollector()");
+//        log.debug("");
+//        log.debug("Method toSinglePostCollector()");
 
         return Collectors.collectingAndThen(Collectors.toList(), list -> {
             if (list.size() != 1) {
@@ -173,8 +180,8 @@ public class ImageServiceImpl implements ImageService {
     // т.е. уменьшать количество байтов в файле
     private byte[] compressBytes(byte[] data) {
         log.debug("");
-        log.debug("Method compressBytes()");
-        log.debug("  Initial Image Byte Size - " + data.length);
+        log.debug("  Method compressBytes()");
+        log.debug("    Initial Image Byte Size - " + data.length);
 
         Deflater deflater = new Deflater();
         deflater.setInput(data);
@@ -192,7 +199,7 @@ public class ImageServiceImpl implements ImageService {
         }
 
         byte[] resultData = outputStream.toByteArray();
-        log.debug("  Compressed Image Byte Size - " + resultData.length);
+        log.debug("    Compressed Image Byte Size - " + resultData.length);
         return resultData;
     }
 
@@ -200,8 +207,8 @@ public class ImageServiceImpl implements ImageService {
     // Перед тем как возвращать картинку на фронт, будем восстанавливать её состояние
     private static byte[] decompressBytes(byte[] data) {
         log.debug("");
-        log.debug("Method decompressBytes()");
-        log.debug("  Initial Size - " + data.length);
+        log.debug("  Method decompressBytes()");
+        log.debug("    Initial Size - " + data.length);
 
         Inflater inflater = new Inflater();
         inflater.setInput(data);
@@ -218,7 +225,7 @@ public class ImageServiceImpl implements ImageService {
         }
 
         byte[] decompress = outputStream.toByteArray();
-        log.debug("  Decompress Size - " + decompress.length);
+        log.debug("    Decompress Size - " + decompress.length);
         return decompress;
     }
 

@@ -1,6 +1,5 @@
 package com.example.simple_insta_backend.controller;
 
-import com.example.simple_insta_backend.entity.User;
 import com.example.simple_insta_backend.payload.request.LoginRequest;
 import com.example.simple_insta_backend.payload.request.SignupRequest;
 import com.example.simple_insta_backend.payload.response.JwtTokenSuccessResponse;
@@ -9,7 +8,6 @@ import com.example.simple_insta_backend.security.JwtTokenProvider;
 import com.example.simple_insta_backend.security.SecurityConstants;
 import com.example.simple_insta_backend.service.UserService;
 import com.example.simple_insta_backend.validator.ResponseErrorValidation;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,7 +25,6 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/api/v1/auth")
 @CrossOrigin
-@Log4j2
 public class AuthController {
 
     @Autowired
@@ -45,18 +42,12 @@ public class AuthController {
     // РЕГИСТРАЦИЯ юзера
     @PostMapping("/signup")
     public ResponseEntity<Object> registerUser(@RequestBody @Valid SignupRequest signupRequest, BindingResult bindingResult) {
-        log.debug("");
-        log.debug("Method registerUser()");
-        log.debug("  signupRequest: " + signupRequest);
-        log.debug("  bindingResult: " + bindingResult);
 
-        // Принимаем BindingResult и сразу смотрим, есть ли в нём какие-нибудь ошибки.
-        // Валидируем объект SignupRequest
+        // Принимаем BindingResult и сразу смотрим, есть ли в нём какие-нибудь ошибки. Валидируем объект SignupRequest
         ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindingResult);
         if (!ObjectUtils.isEmpty(errors)) return errors;
 
-        User created = userService.createUser(signupRequest);
-        log.debug("  created: " + created);
+        userService.createUser(signupRequest);
 
         // Мы регистрируемся, поэтому самого юзера на UI возвращать не будем
         return ResponseEntity.ok(new MessageResponse("User registered successfully"));
@@ -65,10 +56,6 @@ public class AuthController {
     // АУТЕНТИФИКАЦИЯ юзера
     @PostMapping("/signin")
     public ResponseEntity<Object> authenticateUser(@RequestBody @Valid LoginRequest loginRequest, BindingResult bindingResult) {
-        log.debug("");
-        log.debug("Method authenticateUser()");
-        log.debug("  loginRequest: " + loginRequest);
-        log.debug("  bindingResult: " + bindingResult);
 
         // Валидируем объект LoginRequest
         ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindingResult);
@@ -83,7 +70,6 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = SecurityConstants.TOKEN_PREFIX + jwtTokenProvider.generateToken(authentication);
-        log.debug("  jwt: " + jwt);
 
         // Это передаём на клиент (на Angular)
         return ResponseEntity.ok(new JwtTokenSuccessResponse(true, jwt));

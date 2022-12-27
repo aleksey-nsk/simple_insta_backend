@@ -27,6 +27,7 @@ public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, St
         Optional<User> optional = userRepository.findUserByEmail(email);
 
         if (optional.isPresent()) {
+            log.error("");
             log.error("В БД уже есть пользователь с email='" + email + "'");
             return false;
         }

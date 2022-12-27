@@ -12,8 +12,6 @@ public interface PostService {
 
     List<Post> getAllPostsForUser(Principal principal);
 
-    Post getPostById(Long postId, Principal principal);
-
     Post createPost(PostDto postDto, Principal principal);
 
     Post likePost(Long postId, String username);

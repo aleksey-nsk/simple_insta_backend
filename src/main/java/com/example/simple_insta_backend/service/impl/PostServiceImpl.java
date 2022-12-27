@@ -6,7 +6,10 @@ import com.example.simple_insta_backend.entity.Like;
 import com.example.simple_insta_backend.entity.Post;
 import com.example.simple_insta_backend.entity.User;
 import com.example.simple_insta_backend.exception.PostNotFoundException;
-import com.example.simple_insta_backend.repository.*;
+import com.example.simple_insta_backend.repository.CommentRepository;
+import com.example.simple_insta_backend.repository.ImageRepository;
+import com.example.simple_insta_backend.repository.LikeRepository;
+import com.example.simple_insta_backend.repository.PostRepository;
 import com.example.simple_insta_backend.service.PostService;
 import com.example.simple_insta_backend.service.UserService;
 import lombok.extern.log4j.Log4j2;
@@ -26,9 +29,6 @@ public class PostServiceImpl implements PostService {
     private PostRepository postRepository;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private ImageRepository imageRepository;
 
     @Autowired
@@ -40,12 +40,12 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private UserService userService;
 
-    // Вернуть все посты из БД
+    // Получить все посты из БД.
     // Понадобится когда будем заходить на главную страницу приложения
     @Override
     public List<Post> getAllPosts() {
         log.debug("");
-        log.debug("Method getAllPosts()");
+        log.debug("Получить все посты");
 
         List<Post> all = postRepository.findAllByOrderByCreatedDateDesc();
         log.debug("  all: " + all);
@@ -53,54 +53,30 @@ public class PostServiceImpl implements PostService {
         return all;
     }
 
-    // Вернуть все посты для юзера.
-    // Когда будем заходить на страницу профайла юзера, то понадобятся
-    // только посты этого юзера
+    // Получить все посты текущего юзера.
+    // Когда будем заходить в профиль юзера, то понадобятся посты только этого юзера
     @Override
     public List<Post> getAllPostsForUser(Principal principal) {
         log.debug("");
-        log.debug("Method getAllPostsForUser()");
-//        log.debug("  principal: " + principal);
+        log.debug("Получить все посты текущего юзера");
 
-//        User user = getUserByPrincipal(principal);
         User user = userService.getUserByPrincipal(principal);
-        log.debug("  user: " + user);
-
         List<Post> all = postRepository.findAllByUserOrderByCreatedDateDesc(user);
-        log.debug("  all: " + all);
 
-        return all;
-    }
-
-    @Override
-    public Post getPostById(Long postId, Principal principal) {
         log.debug("");
-        log.debug("Method getPostById()");
-        log.debug("  postId: " + postId);
-        log.debug("  principal: " + principal);
-
-        // Будем проверять, принадлежит ли пост данному пользователю
-//        User user = getUserByPrincipal(principal);
-        User user = userService.getUserByPrincipal(principal);
-        Post post = postRepository.findPostByIdAndUser(postId, user)
-                .orElseThrow(() -> new PostNotFoundException("Post cannot be found for user: " + user.getUsername()));
-
-        log.debug("  post: " + post);
-        return post;
+        log.debug("  all: " + all);
+        return all;
     }
 
     // Создать новый пост
     @Override
     public Post createPost(PostDto postDto, Principal principal) {
         log.debug("");
-        log.debug("Method createPost()");
+        log.debug("Создать новый пост");
         log.debug("  postDto: " + postDto);
-//        log.debug("  principal: " + principal);
 
         // Юзер который будет создавать пост
-//        User user = getUserByPrincipal(principal);
         User user = userService.getUserByPrincipal(principal);
-        log.debug("  user: " + user);
 
         Post post = new Post();
         post.setTopic(postDto.getTopic());
@@ -108,14 +84,12 @@ public class PostServiceImpl implements PostService {
         post.setLocation(postDto.getLocation());
         post.setCreatedDate(LocalDateTime.now());
         post.setUser(user);
-        // post.setLikes(0);
-        log.debug("  post: " + post);
 
-        log.debug("  Saving Post for User: {}", user.getUsername());
+        log.debug("");
+        log.debug("  post: " + post);
 
         Post postSaved = postRepository.save(post);
         log.debug("  postSaved: " + postSaved);
-
         return postSaved;
     }
 
@@ -123,7 +97,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post likePost(Long postId, String username) {
         log.debug("");
-        log.debug("Method likePost()");
+        log.debug("Лайкнуть пост");
         log.debug("  postId: " + postId);
         log.debug("  username: " + username);
 
@@ -131,13 +105,13 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new PostNotFoundException("Post not found with id: " + postId));
         log.debug("  post: " + post);
 
-        // Проверим, есть ли от текущего юзера лайк, или ещё нет
+        // Проверим, есть ли лайк от данного юзера, или ещё нет
         List<Like> allLikesByPost = likeRepository.findAllByPost(post);
-        log.debug("  allLikesByPost: " + allLikesByPost);
+        log.debug("  Все лайки поста: " + allLikesByPost);
         Optional<Like> any = allLikesByPost.stream()
                 .filter(like -> like.getUsername().equals(username))
                 .findAny();
-        log.debug("  any: " + any);
+        log.debug("  Есть ли лайк от данного юзера: " + any);
 
         if (any.isPresent()) {
             log.debug("  Лайк уже есть. Отменяем его");
@@ -158,15 +132,15 @@ public class PostServiceImpl implements PostService {
     @Override
     public void deletePost(Long postId, Principal principal) {
         log.debug("");
-        log.debug("Method deletePost()");
+        log.debug("Удалить пост");
         log.debug("  postId: " + postId);
-//        log.debug("  principal: " + principal);
 
-        // Будем проверять, принадлежит ли пост данному пользователю
-//        User user = getUserByPrincipal(principal);
+        // Проверим принадлежит ли пост данному пользователю
         User user = userService.getUserByPrincipal(principal);
         Post post = postRepository.findPostByIdAndUser(postId, user)
                 .orElseThrow(() -> new PostNotFoundException("Post cannot be found for user: " + user.getUsername()));
+
+        log.debug("");
 
         post.getComments()
                 .forEach(comment -> {
@@ -183,26 +157,12 @@ public class PostServiceImpl implements PostService {
         log.debug("  Удалим сам post");
         postRepository.delete(post);
 
-        // Проверим есть ли фотография у этого поста
         Optional<Image> optionalImage = imageRepository.findByPostId(postId);
-        log.debug("  optionalImage: " + optionalImage);
+        log.debug("  Есть ли картинка у данного поста: " + optionalImage);
 
         if (optionalImage.isPresent()) {
-            log.debug("  У поста есть изображение. Удалим его");
+            log.debug("  У поста есть картинка. Удалим её");
             imageRepository.delete(optionalImage.get());
         }
     }
-
-    // Вспомогательный метод: достать юзера из объекта Principal
-//    private User getUserByPrincipal(Principal principal) {
-//        log.debug("");
-//        log.debug("Method getUserByPrincipal()");
-//        log.debug("  principal: " + principal);
-//
-//        String username = principal.getName();
-//        log.debug("  username: " + username);
-//
-//        return userRepository.findUserByUsername(username)
-//                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
-//    }
 }

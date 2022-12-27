@@ -29,7 +29,7 @@ public class UserController {
     @Autowired
     private ResponseErrorValidation responseErrorValidation;
 
-    // Возвращаем юзера, который сейчас авторизирован в системе
+    // Возвращаем юзера, который сейчас авторизирован в системе.
     // Его данные находятся в объекте Principal
     @GetMapping("/")
     public ResponseEntity<UserDto> getCurrentUser(Principal principal) {

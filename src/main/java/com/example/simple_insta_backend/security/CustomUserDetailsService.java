@@ -1,6 +1,8 @@
 package com.example.simple_insta_backend.security;
 
+import com.example.simple_insta_backend.entity.Post;
 import com.example.simple_insta_backend.entity.User;
+import com.example.simple_insta_backend.repository.PostRepository;
 import com.example.simple_insta_backend.repository.UserRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +30,14 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PostRepository postRepository;
+
     // Реализовать извлечение пользователя из БД
     @Override
     public UserDetails loadUserByUsername(String username) {
         log.debug("");
-        log.debug("Method loadUserByUsername()");
-        log.debug("  username: " + username);
+        log.debug("CustomUserDetailsService -> method loadUserByUsername(), username: '" + username + "'");
 
         User user = userRepository
                 .findUserByUsername(username)
@@ -43,7 +47,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.name()))
                 .collect(Collectors.toList());
-        log.debug("  authorities: " + authorities);
 
         User buildUser = new User();
         buildUser.setId(user.getId());
@@ -64,16 +67,16 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findUserById(id).orElse(null);
 
         if (user != null) {
-            log.debug("  roles: " + user.getRoles());
-
             List<GrantedAuthority> authorities = user.getRoles().stream()
                     .map(role -> new SimpleGrantedAuthority(role.name()))
                     .collect(Collectors.toList());
-
             user.setAuthorities(authorities);
-            log.debug("  authorities: " + user.getAuthorities());
+
+            List<Post> userPosts = postRepository.findAllByUserOrderByCreatedDateDesc(user);
+            user.setPosts(userPosts);
         }
 
+        log.debug("  user: " + user);
         return user;
     }
 }

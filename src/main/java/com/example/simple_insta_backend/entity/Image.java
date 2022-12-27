@@ -25,9 +25,6 @@ public class Image {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "image_bytes")
-    private byte[] imageBytes;
-
     //    @JsonIgnore // не передавать на клиента
     @Column(name = "user_id")
     private Long userId;
@@ -35,6 +32,9 @@ public class Image {
     //    @JsonIgnore
     @Column(name = "post_id")
     private Long postId;
+
+    @Column(name = "image_bytes")
+    private byte[] imageBytes;
 
     @Override
     public String toString() {

@@ -40,15 +40,15 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<Comment> getAllCommentsForPost(Long postId) {
         log.debug("");
-        log.debug("Method getAllCommentsForPost()");
+        log.debug("Получить все комментарии поста");
         log.debug("  postId: " + postId);
 
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException("Post not found with id: " + postId));
-        log.debug("  post: " + post);
+//        log.debug("  post: " + post);
 
         List<Comment> allByPost = commentRepository.findAllByPost(post);
-        log.debug("  allByPost: " + allByPost);
+        log.debug("  Все комментарии поста: " + allByPost);
 
         return allByPost;
     }
@@ -57,16 +57,17 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment saveComment(Long postId, CommentDto commentDto, Principal principal) {
         log.debug("");
-        log.debug("Method saveComment()");
+        log.debug("Сохранить комментарий");
         log.debug("  postId: " + postId);
         log.debug("  commentDto: " + commentDto);
 //        log.debug("  principal: " + principal);
 
         User user = userService.getUserByPrincipal(principal);
-        log.debug("  user: " + user);
+//        log.debug("  user: " + user);
 
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException("Post not found with id: " + postId));
+        log.debug("");
         log.debug("  post: " + post);
 
         Comment comment = new Comment();
@@ -76,7 +77,7 @@ public class CommentServiceImpl implements CommentService {
         comment.setPost(post);
         log.debug("  comment: " + comment);
 
-        log.debug("  Saving comment for Post: {}", postId);
+//        log.debug("  Saving comment for Post: {}", postId);
 
         Comment savedComment = commentRepository.save(comment);
         log.debug("  savedComment: " + savedComment);
@@ -87,11 +88,11 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void deleteComment(Long commentId) {
         log.debug("");
-        log.debug("Method deleteComment()");
+        log.debug("Удалить комментарий");
         log.debug("  commentId: " + commentId);
 
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
-        log.debug("  optionalComment: " + optionalComment);
+//        log.debug("  optionalComment: " + optionalComment);
 
         optionalComment.ifPresent(commentRepository::delete);
     }

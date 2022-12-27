@@ -21,8 +21,8 @@ public class ImageController {
     private ImageService imageUploadService;
 
     @GetMapping("/profileImage")
-    public ResponseEntity<Image> getImageForUser(Principal principal) {
-        Image userImage = imageUploadService.getImageToUser(principal);
+    public ResponseEntity<Image> getUserImage(Principal principal) {
+        Image userImage = imageUploadService.getUserImage(principal);
         return new ResponseEntity<>(userImage, HttpStatus.OK);
     }
 

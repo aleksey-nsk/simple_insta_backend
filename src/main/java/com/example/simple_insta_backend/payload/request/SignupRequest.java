@@ -15,18 +15,18 @@ import javax.validation.constraints.Size;
 // при регистрации нового пользователя
 
 @Data
-@PasswordMatches // наша собственная аннотация на уровне класса
+@PasswordMatches // собственная аннотация на уровне класса
 public class SignupRequest {
-
-    @NotBlank(message = "User email is required")
-    @Email(message = "It should have email format")
-    @ValidEmail // наша собственная аннотация
-    @UniqueEmail // собственная аннотация
-    private String email;
 
     @NotEmpty(message = "Please enter your username")
     @UniqueUsername // собственная аннотация
     private String username;
+
+    @NotBlank(message = "User email is required")
+    @Email(message = "It should have email format")
+    @ValidEmail
+    @UniqueEmail
+    private String email;
 
     @NotEmpty(message = "Please enter your firstname")
     private String firstname;

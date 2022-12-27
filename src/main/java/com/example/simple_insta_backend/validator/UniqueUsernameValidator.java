@@ -27,6 +27,7 @@ public class UniqueUsernameValidator implements ConstraintValidator<UniqueUserna
         Optional<User> optional = userRepository.findUserByUsername(username);
 
         if (optional.isPresent()) {
+            log.error("");
             log.error("В БД уже есть пользователь с username='" + username + "'");
             return false;
         }

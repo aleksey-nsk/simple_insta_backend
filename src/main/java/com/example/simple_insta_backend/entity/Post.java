@@ -70,7 +70,6 @@ public class Post {
                 ", location='" + location + '\'' +
                 ", createdDate=" + createdDate +
                 ", comments=" + comments +
-                ", likes=" + likes +
                 '}';
     }
 }

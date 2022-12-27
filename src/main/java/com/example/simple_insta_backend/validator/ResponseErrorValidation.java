@@ -24,8 +24,7 @@ public class ResponseErrorValidation {
 
     public ResponseEntity<Object> mapValidationService(BindingResult bindingResult) {
         log.debug("");
-        log.debug("Method mapValidationService()");
-        log.debug("  bindingResult: " + bindingResult);
+        log.debug("Содержит ли ошибки объект типа BindingResult");
 
         // Объект типа BindingResult будет содержать в себе ошибки.
         // Например, если пришёл объект типа LoginRequest с пустым username
@@ -51,7 +50,7 @@ public class ResponseErrorValidation {
             return new ResponseEntity<>(errorMap, HttpStatus.BAD_REQUEST);
         }
 
-        // Если всё хорошо, и ошибок нет, то возвращаем null
+        log.debug("  всё хорошо, ошибок нет");
         return null;
     }
 }

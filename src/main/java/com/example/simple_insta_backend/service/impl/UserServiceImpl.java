@@ -27,9 +27,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-//    @Autowired
-//    private RoleRepository roleRepository;
-
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
@@ -47,94 +44,72 @@ public class UserServiceImpl implements UserService {
         user.setCreatedDate(LocalDateTime.now());
 
         // Сначала кодируем пароль, а затем сохраняем его в БД
-        user.setPassword(passwordEncoder.encode(userIn.getPassword()));
+        String encodedPswd = passwordEncoder.encode(userIn.getPassword());
+        user.setPassword(encodedPswd);
 
-        // Сразу зададим роль юзер
+        // Зададим стандартную роль ROLE_USER
         user.getRoles().add(ERole.ROLE_USER);
 
         List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.name()))
                 .collect(Collectors.toList());
-        log.debug("  authorities: " + authorities);
         user.setAuthorities(authorities);
 
         log.debug("  user: " + user);
 
         try {
-            log.debug("Saving User: {}", userIn.getUsername());
             User savedUser = userRepository.save(user);
             log.debug("  savedUser: " + savedUser);
-
-//            // Сохранённой роли указать id юзера
-//            Role savedRole = savedUser.getRoles().stream().findFirst().get();
-//            log.debug("  savedRole: " + savedRole);
-//            roleRepository.updateRoleSetUser(savedUser, savedRole.getId());
-
             return savedUser;
-
         } catch (Exception e) {
             log.error("Error during registration: {}", e.getMessage());
             throw new UserExistException("The user already exist. Please check credentials");
         }
     }
 
-    // Обновить юзера.
-    // Когда юзер заходит на свой профайл, то у него должна быть возможность
-    // обновить свои данные (имя, фамилию, биографию, ДАТУ РОЖДЕНИЯ)
+    // Обновить юзера. Когда юзер заходит на свой профайл, то у него
+    // должна быть возможность обновить свои данные (имя, фамилию, биографию)
     @Override
     public User updateUser(UserDto userDto, Principal principal) {
         log.debug("");
         log.debug("Method updateUser()");
         log.debug("  userDto: " + userDto);
-//        log.debug("  principal: " + principal);
 
-        // Объект Principal будет содержать в себе данные юзера
-        // такие как userName, id
-        // И мы можем благодаря этому объекту достать нашего пользователя
-
-        // Сначал берём юзера из БД
         User user = getUserByPrincipal(principal);
-        log.debug("  user: " + user);
 
-        // Далее задаём ему данные, которые мы получили из объекта DTO
+        // Задаём юзеру данные, полученные из объекта DTO
         user.setFirstname(userDto.getFirstname());
         user.setLastname(userDto.getLastname());
         user.setBio(userDto.getBio());
 
         User updated = userRepository.save(user);
+        log.debug("");
         log.debug("  updated: " + updated);
-
         return updated;
     }
 
-    // Вспомогательный метод: достать юзера из объекта Principal
     @Override
     public User getUserByPrincipal(Principal principal) {
         log.debug("");
-        log.debug("Method getUserByPrincipal()");
-//        log.debug("  principal: " + principal);
+        log.debug("  Достать юзера из объекта Principal");
 
         String username = principal.getName();
-        log.debug("  username: " + username);
 
-        return userRepository.findUserByUsername(username)
+        User user = userRepository
+                .findUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+
+        log.debug("    user: " + user);
+        return user;
     }
 
     @Override
     public User getUserById(Long id) {
         log.debug("");
-        log.debug("Method getUserById()");
-        log.debug("  id: " + id);
+        log.debug("Получить юзера по id=" + id);
 
         User user = userRepository.findUserById(id).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         log.debug("  user: " + user);
         return user;
     }
-
-    // Вспомогательный метод. Взять текущего пользователя
-//    public User getCurrentUser(Principal principal) {
-//        return getUserByPrincipal(principal);
-//    }
-
 }

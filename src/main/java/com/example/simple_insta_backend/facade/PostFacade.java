@@ -37,7 +37,7 @@ public class PostFacade {
         Set<String> usersLiked = post.getLikes().stream()
                 .map(like -> like.getUsername())
                 .collect(Collectors.toSet());
-        log.debug("  usersLiked: " + usersLiked);
+//        log.debug("  usersLiked: " + usersLiked);
         postDto.setUsersLiked(usersLiked);
 
         log.debug("  postDto: " + postDto);

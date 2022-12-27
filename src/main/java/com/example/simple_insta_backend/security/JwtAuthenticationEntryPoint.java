@@ -24,17 +24,13 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        log.debug("");
-        log.debug("Method commence()");
-        log.debug("  request: " + request);
-        log.debug("  response: " + response);
-        log.debug("  authException: " + authException);
+        log.error("");
+        log.error("JwtAuthenticationEntryPoint -> method commence()");
+        log.error("  " + authException.getMessage());
 
         InvalidLoginPasswordResponse invalidResponse = new InvalidLoginPasswordResponse();
-        log.debug("  invalidResponse: " + invalidResponse);
-
         String jsonInvalidResponse = new Gson().toJson(invalidResponse);
-        log.debug("  jsonInvalidResponse: " + jsonInvalidResponse);
+        log.error("  " + jsonInvalidResponse);
 
         // response - объект, который будет возвращаться клиенту
         response.setContentType(SecurityConstants.CONTENT_TYPE);
