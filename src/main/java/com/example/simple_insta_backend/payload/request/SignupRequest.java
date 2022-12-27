@@ -1,6 +1,8 @@
 package com.example.simple_insta_backend.payload.request;
 
 import com.example.simple_insta_backend.annotation.PasswordMatches;
+import com.example.simple_insta_backend.annotation.UniqueEmail;
+import com.example.simple_insta_backend.annotation.UniqueUsername;
 import com.example.simple_insta_backend.annotation.ValidEmail;
 import lombok.Data;
 
@@ -19,9 +21,11 @@ public class SignupRequest {
     @NotBlank(message = "User email is required")
     @Email(message = "It should have email format")
     @ValidEmail // наша собственная аннотация
+    @UniqueEmail // собственная аннотация
     private String email;
 
     @NotEmpty(message = "Please enter your username")
+    @UniqueUsername // собственная аннотация
     private String username;
 
     @NotEmpty(message = "Please enter your firstname")

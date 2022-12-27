@@ -60,6 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         log.debug("");
         log.debug("НАСТРОЙКА АВТОРИЗАЦИИ");
+        log.debug("");
 
         http.cors()
                 .and().csrf().disable() // отключаем CSRF
